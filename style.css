@@ -66,3 +66,20 @@ footer {
     width: 100%;
     bottom: 0;
 }
+#results #movie-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.movie-item {
+    width: 200px;
+    border: 1px solid #ddd;
+    padding: 1rem;
+    text-align: center;
+}
+
+.movie-item img {
+    width: 100%;
+    height: auto;
+}
