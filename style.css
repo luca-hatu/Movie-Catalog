@@ -55,6 +55,33 @@ main {
 #results #movie-list {
     display: flex;
     flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.movie-item {
+    width: 200px;
+    border: 1px solid #ddd;
+    padding: 1rem;
+    text-align: center;
+}
+
+.movie-item img {
+    width: 100%;
+    height: auto;
+}
+
+.movie-item h3 {
+    margin: 0.5rem 0;
+}
+
+#details {
+    margin-top: 2rem;
+}
+
+#movie-details img {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
 }
 
 footer {
@@ -66,3 +93,4 @@ footer {
     width: 100%;
     bottom: 0;
 }
+
