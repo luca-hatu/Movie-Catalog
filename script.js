@@ -1,10 +1,10 @@
-
 document.addEventListener('DOMContentLoaded', () => {
     console.log("Document loaded");
 
     const searchButton = document.getElementById('search-button');
     const searchInput = document.getElementById('search-input');
     const movieList = document.getElementById('movie-list');
+    const favoriteList = document.getElementById('favorite-list');
 
     searchButton.addEventListener('click', () => {
         const query = searchInput.value;
@@ -40,7 +40,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 <img src="${movie.Poster}" alt="${movie.Title}">
                 <h3>${movie.Title}</h3>
                 <p>${movie.Year}</p>
+                <button class="favorite-button">Add to Favorites</button>
             `;
+            movieItem.querySelector('.favorite-button').addEventListener('click', () => {
+                addToFavorites(movie);
+            });
             movieItem.addEventListener('click', () => {
                 fetchMovieDetails(movie.imdbID);
             });
@@ -78,42 +82,20 @@ document.addEventListener('DOMContentLoaded', () => {
         document.getElementById('results').style.display = 'none';
         document.getElementById('details').style.display = 'block';
     }
-});
-document.addEventListener('DOMContentLoaded', () => {
-    console.log("Document loaded");
 
-    const searchButton = document.getElementById('search-button');
-    const searchInput = document.getElementById('search-input');
-    const movieList = document.getElementById('movie-list');
-
-    searchButton.addEventListener('click', () => {
-        const query = searchInput.value;
-        if (query) {
-            console.log(`Searching for: ${query}`);
-            fetchMovies(query);
-        }
-    });
-
-    async function fetchMovies(query) {
-        const apiKey = '57b82531'; 
-        const url = `http://www.omdbapi.com/?s=${query}&apikey=${apiKey}`;
-
-        try {
-            const response = await fetch(url);
-            const data = await response.json();
-            if (data.Response === "True") {
-                displayMovies(data.Search);
-            } else {
-                console.log(data.Error);
-            }
-        } catch (error) {
-            console.error("Error fetching data: ", error);
+    function addToFavorites(movie) {
+        let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        if (!favorites.some(fav => fav.imdbID === movie.imdbID)) {
+            favorites.push(movie);
+            localStorage.setItem('favorites', JSON.stringify(favorites));
+            displayFavorites();
         }
     }
 
-    function displayMovies(movies) {
-        movieList.innerHTML = '';
-        movies.forEach(movie => {
+    function displayFavorites() {
+        const favorites = JSON.parse(localStorage.getItem('favorites')) || [];
+        favoriteList.innerHTML = '';
+        favorites.forEach(movie => {
             const movieItem = document.createElement('div');
             movieItem.classList.add('movie-item');
             movieItem.innerHTML = `
@@ -121,8 +103,12 @@ document.addEventListener('DOMContentLoaded', () => {
                 <h3>${movie.Title}</h3>
                 <p>${movie.Year}</p>
             `;
-            movieList.appendChild(movieItem);
+            movieItem.addEventListener('click', () => {
+                fetchMovieDetails(movie.imdbID);
+            });
+            favoriteList.appendChild(movieItem);
         });
     }
-});
 
+    displayFavorites();
+});
