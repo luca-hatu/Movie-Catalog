@@ -4,16 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie Database</title>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 </head>
 <body>
-    <header>
-        <h1>Movie Database</h1>
-    </header>
     <main>
         <section id="search">
-            <h2>Search Movies</h2>
+            <h1>Search Movies</h1>
             <input type="text" id="search-input" placeholder="Enter movie name">
             <button id="search-button">Search</button>
         </section>
@@ -29,18 +26,14 @@
                 <div id="review-list"></div>
                 <h3>Add a Review</h3>
                 <div>
-                    <label for="rating">Rating:</label>
-                    <select id="rating">
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                    </select>
-                </div>
-                <div>
-                    <label for="review-text">Review:</label>
-                    <textarea id="review-text" rows="4" cols="50"></textarea>
+                    <div id="star-rating" class="star-rating">
+                        <span data-value="1">&#9733;</span>
+                        <span data-value="2">&#9733;</span>
+                        <span data-value="3">&#9733;</span>
+                        <span data-value="4">&#9733;</span>
+                        <span data-value="5">&#9733;</span>
+                    </div>
+                    <textarea id="review-text" rows="4" cols="50" placeholder="Write your review..."></textarea>
                 </div>
                 <button id="submit-review">Submit Review</button>
             </div>

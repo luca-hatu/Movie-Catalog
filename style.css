@@ -1,118 +1,110 @@
 body {
     font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
     margin: 0;
     padding: 0;
-    box-sizing: border-box;
 }
-header {
-    background-color: #333;
-    color: white;
-    padding: 1rem;
-}
-header h1 {
-    margin: 0;
-}
-nav ul {
-    list-style: none;
-    padding: 0;
-}
-nav ul li {
-    display: inline;
-    margin-right: 1rem;
-}
-nav ul li a {
-    color: white;
-    text-decoration: none;
-}
+
 main {
-    padding: 2rem;
+    padding: 20px;
 }
-#search {
-    margin-bottom: 2rem;
+
+h1, h2, h3 {
+    color: #333;
+    margin-bottom: 10px;
 }
-#search input {
-    padding: 0.5rem;
+
+input, button, textarea {
+    font-family: inherit;
     font-size: 1rem;
+    padding: 10px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    margin-bottom: 10px;
 }
-#search button {
-    padding: 0.5rem;
-    font-size: 1rem;
+
+button {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
 }
-#results {
-    margin-top: 2rem;
+
+button:hover {
+    background-color: #555;
 }
-#results #movie-list {
+
+textarea {
+    resize: vertical;
+}
+
+.star-rating {
+    display: flex;
+    justify-content: space-between;
+    max-width: 200px;
+    margin-bottom: 10px;
+}
+
+.star-rating span {
+    font-size: 24px;
+    color: #ddd;
+    cursor: pointer;
+}
+
+.star-rating span:hover,
+.star-rating span:hover ~ span {
+    color: #f39c12;
+}
+
+.movie-list {
     display: flex;
     flex-wrap: wrap;
-    gap: 1rem;
+    gap: 10px;
 }
+
 .movie-item {
-    width: 200px;
+    background-color: #fff;
     border: 1px solid #ddd;
-    padding: 1rem;
-    text-align: center;
-    position: relative;
+    border-radius: 5px;
+    overflow: hidden;
+    width: 200px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
 }
+
+.movie-item:hover {
+    transform: scale(1.05);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+}
+
 .movie-item img {
     width: 100%;
     height: auto;
 }
+
 .movie-item h3 {
-    margin: 0.5rem 0;
-}
-.favorite-button {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background: #ff4757;
-    color: white;
-    border: none;
-    padding: 0.5rem;
-    cursor: pointer;
+    margin: 0;
+    padding: 0 10px;
     font-size: 1rem;
 }
-#details {
-    margin-top: 2rem;
-}
-#movie-details img {
-    width: 100%;
-    max-width: 300px;
-    height: auto;
-}
-#favorites {
-    margin-top: 2rem;
-}
-#reviews {
-    margin-top: 2rem;
+
+.movie-item p {
+    margin: 5px 0;
+    padding: 0 10px;
+    font-size: 0.9rem;
 }
 
-#reviews h3 {
-    margin-bottom: 1rem;
+.movie-item .rating {
+    display: flex;
+    justify-content: center;
+    padding: 5px 0;
 }
 
-#reviews label {
-    display: block;
-    margin: 0.5rem 0 0.25rem;
-}
-
-#reviews select,
-#reviews textarea {
-    width: 100%;
-    max-width: 300px;
-    padding: 0.5rem;
-    margin-bottom: 1rem;
-}
-
-#reviews button {
-    padding: 0.5rem 1rem;
-    background-color: #333;
-    color: white;
-    border: none;
-    cursor: pointer;
-}
-
-#review-list {
-    margin-top: 1rem;
+.movie-item .rating span {
+    font-size: 16px;
+    margin-right: 5px;
 }
 
 .review-item {
@@ -126,5 +118,6 @@ main {
 
 .review-rating {
     color: #ffcc00;
+    margin: 0;
 }
 
