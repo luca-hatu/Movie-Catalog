@@ -4,19 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Movie Database</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
     <header>
         <h1>Movie Database</h1>
-        <nav>
-            <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Movies</a></li>
-                <li><a href="#">About</a></li>
-                <li><a href="#">Contact</a></li>
-            </ul>
-        </nav>
     </header>
     <main>
         <section id="search">
@@ -31,15 +24,32 @@
         <section id="details" style="display: none;">
             <h2>Movie Details</h2>
             <div id="movie-details"></div>
+            <div id="reviews">
+                <h3>Reviews</h3>
+                <div id="review-list"></div>
+                <h3>Add a Review</h3>
+                <div>
+                    <label for="rating">Rating:</label>
+                    <select id="rating">
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                    </select>
+                </div>
+                <div>
+                    <label for="review-text">Review:</label>
+                    <textarea id="review-text" rows="4" cols="50"></textarea>
+                </div>
+                <button id="submit-review">Submit Review</button>
+            </div>
         </section>
         <section id="favorites">
             <h2>Favorite Movies</h2>
             <div id="favorite-list" class="movie-list"></div>
         </section>
     </main>
-    <footer>
-        <p>&copy; 2024 Movie Database</p>
-    </footer>
     <script src="script.js"></script>
 </body>
 </html>

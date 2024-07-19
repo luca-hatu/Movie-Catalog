@@ -4,60 +4,48 @@ body {
     padding: 0;
     box-sizing: border-box;
 }
-
 header {
     background-color: #333;
     color: white;
     padding: 1rem;
 }
-
 header h1 {
     margin: 0;
 }
-
 nav ul {
     list-style: none;
     padding: 0;
 }
-
 nav ul li {
     display: inline;
     margin-right: 1rem;
 }
-
 nav ul li a {
     color: white;
     text-decoration: none;
 }
-
 main {
     padding: 2rem;
 }
-
 #search {
     margin-bottom: 2rem;
 }
-
 #search input {
     padding: 0.5rem;
     font-size: 1rem;
 }
-
 #search button {
     padding: 0.5rem;
     font-size: 1rem;
 }
-
 #results {
     margin-top: 2rem;
 }
-
 #results #movie-list {
     display: flex;
     flex-wrap: wrap;
     gap: 1rem;
 }
-
 .movie-item {
     width: 200px;
     border: 1px solid #ddd;
@@ -65,16 +53,13 @@ main {
     text-align: center;
     position: relative;
 }
-
 .movie-item img {
     width: 100%;
     height: auto;
 }
-
 .movie-item h3 {
     margin: 0.5rem 0;
 }
-
 .favorite-button {
     position: absolute;
     top: 10px;
@@ -86,28 +71,60 @@ main {
     cursor: pointer;
     font-size: 1rem;
 }
-
 #details {
     margin-top: 2rem;
 }
-
 #movie-details img {
     width: 100%;
     max-width: 300px;
     height: auto;
 }
-
 #favorites {
     margin-top: 2rem;
 }
+#reviews {
+    margin-top: 2rem;
+}
 
-footer {
+#reviews h3 {
+    margin-bottom: 1rem;
+}
+
+#reviews label {
+    display: block;
+    margin: 0.5rem 0 0.25rem;
+}
+
+#reviews select,
+#reviews textarea {
+    width: 100%;
+    max-width: 300px;
+    padding: 0.5rem;
+    margin-bottom: 1rem;
+}
+
+#reviews button {
+    padding: 0.5rem 1rem;
     background-color: #333;
     color: white;
-    text-align: center;
-    padding: 1rem;
-    position: fixed;
-    width: 100%;
-    bottom: 0;
+    border: none;
+    cursor: pointer;
+}
+
+#review-list {
+    margin-top: 1rem;
+}
+
+.review-item {
+    border-bottom: 1px solid #ddd;
+    padding: 0.5rem 0;
+}
+
+.review-item:last-child {
+    border-bottom: none;
+}
+
+.review-rating {
+    color: #ffcc00;
 }
 
