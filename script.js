@@ -5,7 +5,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const searchInput = document.getElementById('search-input');
     const movieList = document.getElementById('movie-list');
     const favoriteList = document.getElementById('favorite-list');
-    const submitReviewButton = document.getElementById('submit-review');
+    const watchlistList = document.getElementById('watchlist-list');
 
     searchButton.addEventListener('click', () => {
         const query = searchInput.value;
@@ -26,6 +26,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 displayMovies(data.Search);
             } else {
                 console.log(data.Error);
+                movieList.innerHTML = `<p>${data.Error}</p>`;
             }
         } catch (error) {
             console.error("Error fetching data: ", error);
@@ -41,21 +42,32 @@ document.addEventListener('DOMContentLoaded', () => {
                 <img src="${movie.Poster}" alt="${movie.Title}">
                 <h3>${movie.Title}</h3>
                 <p>${movie.Year}</p>
-                <span class="material-icons favorite-button">favorite_border</span>
+                <div class="ratings">${getRatingsHTML(movie.Ratings)}</div>
+                <span class="material-icons favorite-button">${isFavorite(movie.imdbID) ? 'favorite' : 'favorite_border'}</span>
+                <span class="material-icons watchlist-button">${isInWatchlist(movie.imdbID) ? 'bookmark' : 'bookmark_border'}</span>
             `;
             const favoriteButton = movieItem.querySelector('.favorite-button');
             favoriteButton.addEventListener('click', (event) => {
                 event.stopPropagation();
                 toggleFavorite(movie, favoriteButton);
             });
+            const watchlistButton = movieItem.querySelector('.watchlist-button');
+            watchlistButton.addEventListener('click', (event) => {
+                event.stopPropagation();
+                toggleWatchlist(movie, watchlistButton);
+            });
             movieItem.addEventListener('click', () => {
                 fetchMovieDetails(movie.imdbID);
             });
             movieList.appendChild(movieItem);
-            if (isFavorite(movie.imdbID)) {
-                favoriteButton.textContent = 'favorite';
-            }
         });
+    }
+
+    function getRatingsHTML(ratings) {
+        if (!ratings) return '';
+        return ratings.map(rating => `
+            <span>${rating.Source}: ${rating.Value}</span>
+        `).join('');
     }
 
     async function fetchMovieDetails(imdbID) {
@@ -91,8 +103,6 @@ document.addEventListener('DOMContentLoaded', () => {
         `;
         document.getElementById('results').style.display = 'none';
         document.getElementById('details').style.display = 'block';
-
-        displayReviews(movie.imdbID);
     }
 
     function toggleFavorite(movie, button) {
@@ -124,11 +134,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 <img src="${movie.Poster}" alt="${movie.Title}">
                 <h3>${movie.Title}</h3>
                 <p>${movie.Year}</p>
+                <div class="ratings">${getRatingsHTML(movie.Ratings)}</div>
                 <span class="material-icons favorite-button">favorite</span>
+                <span class="material-icons watchlist-button">${isInWatchlist(movie.imdbID) ? 'bookmark' : 'bookmark_border'}</span>
             `;
-            movieItem.querySelector('.favorite-button').addEventListener('click', (event) => {
+            const watchlistButton = movieItem.querySelector('.watchlist-button');
+            watchlistButton.addEventListener('click', (event) => {
                 event.stopPropagation();
-                toggleFavorite(movie, movieItem.querySelector('.favorite-button'));
+                toggleWatchlist(movie, watchlistButton);
             });
             movieItem.addEventListener('click', () => {
                 fetchMovieDetails(movie.imdbID);
@@ -137,41 +150,53 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    function displayReviews(imdbID) {
-        const reviews = JSON.parse(localStorage.getItem('reviews')) || {};
-        const movieReviews = reviews[imdbID] || [];
-        const reviewList = document.getElementById('review-list');
-        reviewList.innerHTML = '';
+    function toggleWatchlist(movie, button) {
+        let watchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
+        const movieIndex = watchlist.findIndex(watch => watch.imdbID === movie.imdbID);
+        if (movieIndex > -1) {
+            watchlist.splice(movieIndex, 1);
+            button.textContent = 'bookmark_border';
+        } else {
+            watchlist.push(movie);
+            button.textContent = 'bookmark';
+        }
+        localStorage.setItem('watchlist', JSON.stringify(watchlist));
+        displayWatchlist();
+    }
 
-        movieReviews.forEach(review => {
-            const reviewItem = document.createElement('div');
-            reviewItem.classList.add('review-item');
-            reviewItem.innerHTML = `
-                <p class="review-rating">Rating: ${'★'.repeat(review.rating)}</p>
-                <p>${review.text}</p>
+    function isInWatchlist(imdbID) {
+        const watchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
+        return watchlist.some(watch => watch.imdbID === imdbID);
+    }
+
+    function displayWatchlist() {
+        const watchlist = JSON.parse(localStorage.getItem('watchlist')) || [];
+        watchlistList.innerHTML = '';
+        watchlist.forEach(movie => {
+            const movieItem = document.createElement('div');
+            movieItem.classList.add('movie-item');
+            movieItem.innerHTML = `
+                <img src="${movie.Poster}" alt="${movie.Title}">
+                <h3>${movie.Title}</h3>
+                <p>${movie.Year}</p>
+                <div class="ratings">${getRatingsHTML(movie.Ratings)}</div>
+                <span class="material-icons favorite-button">${isFavorite(movie.imdbID) ? 'favorite' : 'favorite_border'}</span>
+                <span class="material-icons watchlist-button">bookmark</span>
             `;
-            reviewList.appendChild(reviewItem);
+            const favoriteButton = movieItem.querySelector('.favorite-button');
+            favoriteButton.addEventListener('click', (event) => {
+                event.stopPropagation();
+                toggleFavorite(movie, favoriteButton);
+            });
+            movieItem.addEventListener('click', () => {
+                fetchMovieDetails(movie.imdbID);
+            });
+            watchlistList.appendChild(movieItem);
         });
     }
 
-    submitReviewButton.addEventListener('click', () => {
-        const rating = document.getElementById('rating').value;
-        const reviewText = document.getElementById('review-text').value;
-        const imdbID = document.querySelector('#movie-details img').getAttribute('data-imdbid');
-
-        if (rating && reviewText) {
-            const reviews = JSON.parse(localStorage.getItem('reviews')) || {};
-            if (!reviews[imdbID]) {
-                reviews[imdbID] = [];
-            }
-            reviews[imdbID].push({ rating, text: reviewText });
-            localStorage.setItem('reviews', JSON.stringify(reviews));
-
-            document.getElementById('rating').value = '1';
-            document.getElementById('review-text').value = '';
-
-            displayReviews(imdbID);
-        }
-    });
     displayFavorites();
+    displayWatchlist();
 });
+
+
