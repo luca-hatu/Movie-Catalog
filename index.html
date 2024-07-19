@@ -12,6 +12,20 @@
         <section id="search">
             <h1>Search Movies</h1>
             <input type="text" id="search-input" placeholder="Enter movie name">
+            <select id="genre-filter">
+                <option value="">All Genres</option>
+                <option value="Action">Action</option>
+                <option value="Comedy">Comedy</option>
+                <option value="Drama">Drama</option>
+                <option value="Horror">Horror</option>
+            </select>
+            <input type="number" id="year-filter" placeholder="Year (e.g., 2022)" min="1900" max="2024">
+            <input type="text" id="director-filter" placeholder="Director">
+            <input type="text" id="actor-filter" placeholder="Actor">
+            <select id="sort-by">
+                <option value="rating">Sort by Rating</option>
+                <option value="year">Sort by Year</option>
+            </select>
             <button id="search-button">Search</button>
         </section>
         <section id="results">

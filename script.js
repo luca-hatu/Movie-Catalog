@@ -3,27 +3,44 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const searchButton = document.getElementById('search-button');
     const searchInput = document.getElementById('search-input');
+    const genreFilter = document.getElementById('genre-filter');
+    const yearFilter = document.getElementById('year-filter');
+    const directorFilter = document.getElementById('director-filter');
+    const actorFilter = document.getElementById('actor-filter');
+    const sortBy = document.getElementById('sort-by');
     const movieList = document.getElementById('movie-list');
     const favoriteList = document.getElementById('favorite-list');
     const watchlistList = document.getElementById('watchlist-list');
 
     searchButton.addEventListener('click', () => {
         const query = searchInput.value;
+        const genre = genreFilter.value;
+        const year = yearFilter.value;
+        const director = directorFilter.value;
+        const actor = actorFilter.value;
+        const sort = sortBy.value;
+
         if (query) {
             console.log(`Searching for: ${query}`);
-            fetchMovies(query);
+            fetchMovies(query, genre, year, director, actor, sort);
         }
     });
 
-    async function fetchMovies(query) {
+    async function fetchMovies(query, genre, year, director, actor, sort) {
         const apiKey = '57b82531'; 
-        const url = `http://www.omdbapi.com/?s=${query}&apikey=${apiKey}`;
+        let url = `http://www.omdbapi.com/?s=${query}&apikey=${apiKey}`;
+        
+        if (genre) url += `&genre=${genre}`;
+        if (year) url += `&y=${year}`;
+        if (director) url += `&director=${director}`;
+        if (actor) url += `&actor=${actor}`;
 
         try {
             const response = await fetch(url);
             const data = await response.json();
             if (data.Response === "True") {
-                displayMovies(data.Search);
+                const sortedMovies = sortMovies(data.Search, sort);
+                displayMovies(sortedMovies);
             } else {
                 console.log(data.Error);
                 movieList.innerHTML = `<p>${data.Error}</p>`;
@@ -31,6 +48,25 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (error) {
             console.error("Error fetching data: ", error);
         }
+    }
+
+    function sortMovies(movies, sortBy) {
+        if (sortBy === 'rating') {
+            return movies.sort((a, b) => getAverageRating(b) - getAverageRating(a));
+        } else if (sortBy === 'year') {
+            return movies.sort((a, b) => b.Year - a.Year);
+        } else if (sortBy === 'popularity') {
+            return movies.sort((a, b) => getPopularity(b) - getPopularity(a));
+        } else {
+            return movies;
+        }
+    }
+
+    function getAverageRating(movie) {
+        const ratings = movie.Ratings || [];
+        if (ratings.length === 0) return 0;
+        const sum = ratings.reduce((acc, rating) => acc + parseFloat(rating.Value), 0);
+        return sum / ratings.length;
     }
 
     function displayMovies(movies) {
@@ -68,41 +104,6 @@ document.addEventListener('DOMContentLoaded', () => {
         return ratings.map(rating => `
             <span>${rating.Source}: ${rating.Value}</span>
         `).join('');
-    }
-
-    async function fetchMovieDetails(imdbID) {
-        const apiKey = '57b82531'; 
-        const url = `http://www.omdbapi.com/?i=${imdbID}&apikey=${apiKey}`;
-
-        try {
-            const response = await fetch(url);
-            const data = await response.json();
-            if (data.Response === "True") {
-                displayMovieDetails(data);
-            } else {
-                console.log(data.Error);
-            }
-        } catch (error) {
-            console.error("Error fetching data: ", error);
-        }
-    }
-
-    function displayMovieDetails(movie) {
-        const movieDetails = document.getElementById('movie-details');
-        movieDetails.innerHTML = `
-            <img src="${movie.Poster}" alt="${movie.Title}" data-imdbid="${movie.imdbID}">
-            <h3>${movie.Title}</h3>
-            <p><strong>Year:</strong> ${movie.Year}</p>
-            <p><strong>Genre:</strong> ${movie.Genre}</p>
-            <p><strong>Director:</strong> ${movie.Director}</p>
-            <p><strong>Plot:</strong> ${movie.Plot}</p>
-            <h4>Ratings:</h4>
-            <ul>
-                ${movie.Ratings.map(rating => `<li><strong>${rating.Source}:</strong> ${rating.Value}</li>`).join('')}
-            </ul>
-        `;
-        document.getElementById('results').style.display = 'none';
-        document.getElementById('details').style.display = 'block';
     }
 
     function toggleFavorite(movie, button) {
